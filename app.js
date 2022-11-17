@@ -10,8 +10,32 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 // create the Express app
 const app = express();
 
+//importing the User and Course Routes
+const userRoutes = require('./routes/users'); 
+const courseRoutes = require('./routes/courses'); 
+
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
+
+//import sequelize
+const sequelize = require('./models/index').sequelize; 
+
+//tests database connection to app
+sequelize
+  .authenticate()
+  .then(function(err) {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(function (err) {
+    console.log('Unable to connect to the database:', err);
+  });
+
+
+
+//adding users and course routes
+app.use('/api', userRoutes); 
+app.use('/api', courseRoutes); 
+
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
