@@ -1,29 +1,31 @@
-
 const express = require('express'); 
 const router = express.Router(); 
 
-// Handler function to wrap each route.
-function asyncHandler(cb) {
-  return async (req, res, next) => {
+//importing in User Model 
+const User = require('./models').User;
+
+//importing middleware for handler & authentication
+const {asyncHandler} = require('../middleware/async-handler'); 
+const { authenticateUser } = require('../middleware/auth-user'); 
+
+
+router.get('/users',authenticateUser, asyncHandler(async (req,res) => {
+    const user = req.currentUser;
+    res.json(user); 
+})); 
+
+router.post('/users', asyncHandler(async(req, res) => {
     try {
-      await cb(req, res, next);
-    } catch (error) {
-      // Forward error to the global error handler
-      next(error);
-    }
-  };
-}
-
-router.get('/users', (req,res) => {
-    res.json({
-        message: 'You just requested the user data!',
-      });
-}); 
-
-// router.post('/users', (req, res) => {
-//     res.json({
-//         message: 'You just !',
-//       });
-// })
+        await User.create(req.body);
+        res.status(201).location('/').end(); 
+      } catch (error) {
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+          const errors = error.errors.map(err => err.message);
+          res.status(400).json({ errors });
+        } else {
+          throw error;
+        }
+      }
+})); 
 
 module.exports = router; 
