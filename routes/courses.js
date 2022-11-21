@@ -12,11 +12,11 @@ const { authenticateUser } = require('../middleware/auth-user');
 router.get('/courses', asyncHandler(async(req,res) => {
   const courses = await Course.findAll({
     attributes: [
-      "id", 
-      "title", 
-      "description", 
-      "estimatedTime", 
-      "materialsNeeded", 
+      'id', 
+      'title', 
+      'description', 
+      'estimatedTime', 
+      'materialsNeeded', 
     ], 
     include: [
       {
@@ -34,11 +34,11 @@ router.get('/courses', asyncHandler(async(req,res) => {
 router.get('/courses/:id', asyncHandler(async(req,res, next) => {
   const course = await Course.findByPk(req.params.id, {
     attributes: [
-      "id", 
-      "title", 
-      "description", 
-      "estimatedTime", 
-      "materialsNeeded", 
+      'id', 
+      'title', 
+      'description', 
+      'estimatedTime', 
+      'materialsNeeded', 
     ], 
     include: [
       {
