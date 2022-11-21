@@ -9,6 +9,7 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 
 // create the Express app
 const app = express();
+app.use(express.json()); // for parsing application/json
 
 //importing the User and Course Routes
 const userRoutes = require('./routes/users'); 
@@ -30,12 +31,9 @@ sequelize
     console.log('Unable to connect to the database:', err);
   });
 
-
-
 //adding users and course routes
 app.use('/api', userRoutes); 
 app.use('/api', courseRoutes); 
-
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {

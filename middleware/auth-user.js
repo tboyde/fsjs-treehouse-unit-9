@@ -27,7 +27,7 @@ exports.authenticateUser = async (req, res, next) => {
                 message = `Sorry, authentication failed for user associated with ${user.emailAddress}`;
             }
         } else {
-            message = `User information was not successfully retrieved. ${user.emailAddress} is not associated with an account`;
+            message = `User information was not successfully retrieved. Information received is not associated with an account`;
         }
     } else {
         message = 'Auth header not found';

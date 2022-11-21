@@ -1,6 +1,7 @@
 'use strict';
 
 const Sequelize = require('sequelize'); 
+const bcrypt = require('bcrypt'); 
 
 module.exports = (sequelize) => {
   class User extends Sequelize.Model {}
@@ -47,6 +48,10 @@ module.exports = (sequelize) => {
     password: {
       type: Sequelize.STRING,
       allowNull: false,  
+      set(val) {
+        const hashedPassword = bcrypt.hashSync(val, 10);
+        this.setDataValue('password', hashedPassword);
+    },
       validate: {
         notNull: {
           msg: 'A Password Is Required',
@@ -54,23 +59,19 @@ module.exports = (sequelize) => {
         notEmpty: {
           msg: 'Please provide a password',
         },
-        len: {
-          args: [8, 20],
-          msg: 'The password must be between 8 - 20 characters in length',
-        },
       },
     }
   }, {sequelize});
 
   User.associate = (models) => {
     User.hasMany(models.Course, {
-      as: "user",
+      as: 'courseOwner', 
       foreignKey: {
         fieldName: 'userId',
         allowNull: false,
       },
     });
   };
-
+  
   return User;
 };
