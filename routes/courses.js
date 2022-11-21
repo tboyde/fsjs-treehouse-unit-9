@@ -87,7 +87,9 @@ router.put('/courses/:id', authenticateUser, async(req, res) => {
       await course.update(req.body)
       res.status(204).end()
     } else {
-      res.status(403).json({message: `Access Denied: ${user.emailAddress} is not the owner of the requested course`}); 
+      res.status(403)
+        .json({message: `Access Denied: ${course.title} can only be updated by the course owner.`})
+        .end(); 
     }
   } catch(error){
     if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError'){
@@ -108,7 +110,9 @@ router.delete('/courses/:id', authenticateUser, asyncHandler(async(req, res) => 
     await course.destroy()
     res.status(204).end()
   } else {
-    res.status(403).end()
+    res.status(403)
+      .json({message: `Forbidden: ${course.title} can only be deleted by the course owner.`})
+      .end()
   }
 })); 
 
