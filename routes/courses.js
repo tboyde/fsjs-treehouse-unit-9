@@ -22,7 +22,7 @@ router.get('/courses', asyncHandler(async(req,res) => {
       {
         model: User, 
         as: 'courseOwner',
-        attributes: ['firstName', 'lastName', 'emailAddress'], 
+        attributes: ['id', 'firstName', 'lastName', 'emailAddress'], 
       }
     ]
   })
@@ -44,7 +44,7 @@ router.get('/courses/:id', asyncHandler(async(req,res, next) => {
       {
         model: User, 
         as: 'courseOwner', 
-        attributes: ['firstName', 'lastName', 'emailAddress'], 
+        attributes: ['id', 'firstName', 'lastName', 'emailAddress'], 
       }
     ]
   }); 
